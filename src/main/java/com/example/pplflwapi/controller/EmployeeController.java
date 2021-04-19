@@ -6,6 +6,7 @@ import com.example.pplflwapi.domain.Employee;
 import com.example.pplflwapi.mapper.EmployeeMapper;
 import com.example.pplflwapi.service.EmployeeService;
 import com.example.pplflwapi.statemachine.event.EmployeeEvent;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,18 +34,21 @@ public class EmployeeController {
 
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation("Retrieves all employees")
     public List<Employee> findAll() {
         return employeeService.findAll();
     }
 
     @GetMapping(path = "/{employeeId}")
     @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation("Retrieves employee by id")
     public EmployeeResponse find(@PathVariable Long employeeId) {
         return employeeMapper.toEmployeeResponse(employeeService.find(employeeId));
     }
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
+    @ApiOperation("Creates new employee")
     public EmployeeResponse create(@RequestBody @NotNull @Valid EmployeeSaveRequest employeeSaveRequest) {
         Employee employee = employeeMapper.toEmployee(employeeSaveRequest);
         return employeeMapper.toEmployeeResponse(employeeService.create(employee));
@@ -52,6 +56,7 @@ public class EmployeeController {
 
     @PutMapping(path = "/{employeeId}")
     @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation("Updates employee by id")
     public EmployeeResponse update(@PathVariable Long employeeId,
                            @RequestBody @NotNull @Valid EmployeeSaveRequest employeeSaveRequest) {
         Employee employee = employeeMapper.toEmployee(employeeSaveRequest);
@@ -61,6 +66,7 @@ public class EmployeeController {
 
     @PatchMapping(path = "/{employeeId}/events/{eventId}")
     @ResponseStatus(value = HttpStatus.OK)
+    @ApiOperation("Processes event by employee id")
     public EmployeeResponse processEvent(@PathVariable Long employeeId, @PathVariable EmployeeEvent eventId) {
         employeeService.processEvent(employeeId, eventId);
         return employeeMapper.toEmployeeResponse(employeeService.find(employeeId));
