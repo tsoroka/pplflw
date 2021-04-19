@@ -77,4 +77,20 @@ class EmployeeControllerTest {
         assertEquals(EMPLOYEE_NAME, employeeResponse.getName());
         assertEquals(EmployeeState.ACTIVE, employeeResponse.getState());
     }
+
+    @Test
+    void createAndProcessEventInIncorrectOrderTest() {
+        EmployeeSaveRequest employeeSaveRequest = new EmployeeSaveRequest();
+        employeeSaveRequest.setAge(EMPLOYEE_AGE);
+        employeeSaveRequest.setName(EMPLOYEE_NAME);
+
+        EmployeeResponse employeeResponse = employeeController.create(employeeSaveRequest);
+
+        employeeController.processEvent(employeeResponse.getId(), EmployeeEvent.CHECK);
+        employeeResponse = employeeController.processEvent(employeeResponse.getId(), EmployeeEvent.MAKE_ACTIVE);
+
+        assertEquals(EMPLOYEE_AGE, employeeResponse.getAge());
+        assertEquals(EMPLOYEE_NAME, employeeResponse.getName());
+        assertEquals(EmployeeState.IN_CHECK, employeeResponse.getState());
+    }
 }
