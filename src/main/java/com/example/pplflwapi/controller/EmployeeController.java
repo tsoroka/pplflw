@@ -1,11 +1,14 @@
 package com.example.pplflwapi.controller;
 
+import com.example.pplflwapi.controller.model.request.EmployeeSaveRequest;
+import com.example.pplflwapi.controller.model.response.EmployeeResponse;
 import com.example.pplflwapi.domain.Employee;
-import com.example.pplflwapi.event.EmployeeEvent;
-import com.example.pplflwapi.state.EmployeeState;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import com.example.pplflwapi.mapper.EmployeeMapper;
+import com.example.pplflwapi.service.EmployeeService;
+import com.example.pplflwapi.statemachine.event.EmployeeEvent;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,28 +18,51 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.List;
+
 @RestController
-@RequestMapping("/v1/employees")
+@RequestMapping("/api/v1/employees")
+@AllArgsConstructor
 public class EmployeeController {
+
+    private final EmployeeService employeeService;
+
+    private final EmployeeMapper employeeMapper;
+
+    @GetMapping
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<Employee> findAll() {
+        return employeeService.findAll();
+    }
+
+    @GetMapping(path = "/{employeeId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public EmployeeResponse find(@PathVariable Long employeeId) {
+        return employeeMapper.toEmployeeResponse(employeeService.find(employeeId));
+    }
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Employee create(Employee employee) {
-
-        return new Employee();
+    public EmployeeResponse create(EmployeeSaveRequest employeeSaveRequest) {
+        Employee employee = employeeMapper.toEmployee(employeeSaveRequest);
+        return employeeMapper.toEmployeeResponse(employeeService.create(employee));
     }
 
     @PutMapping(path = "/{employeeId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public Employee update(@PathVariable String employeeId,
-                           @RequestBody @Valid @NotNull Employee employee) {
-
-        return new Employee();
+    public EmployeeResponse update(@PathVariable Long employeeId,
+                           @RequestBody @Valid @NotNull EmployeeSaveRequest employeeSaveRequest) {
+        Employee employee = employeeMapper.toEmployee(employeeSaveRequest);
+        employee.setId(employeeId);
+        return employeeMapper.toEmployeeResponse(employeeService.update(employee));
     }
 
     @PatchMapping(path = "/{employeeId}/events/{eventId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public void triggerEvent(@PathVariable String employeeId, @PathVariable EmployeeEvent eventId) {
-
+    public EmployeeResponse processEvent(@PathVariable Long employeeId, @PathVariable EmployeeEvent eventId) {
+        employeeService.processEvent(employeeId, eventId);
+        return employeeMapper.toEmployeeResponse(employeeService.find(employeeId));
     }
 }

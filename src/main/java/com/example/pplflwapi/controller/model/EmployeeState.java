@@ -1,4 +1,4 @@
-package com.example.pplflwapi.state;
+package com.example.pplflwapi.controller.model;
 
 public enum EmployeeState {
 

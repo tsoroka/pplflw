@@ -1,0 +1,9 @@
+version: '2'
+services:
+  pplflw-api:
+    image: 'pplflw-api:latest'
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - 8080:8080
