@@ -1,6 +1,7 @@
 package com.example.pplflwapi.controller.model;
 
 import io.swagger.annotations.ApiModel;
+import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
@@ -8,4 +9,6 @@ import lombok.Data;
 public class ErrorResponse {
 
     private String message;
+
+    private LocalDateTime timestamp;
 }

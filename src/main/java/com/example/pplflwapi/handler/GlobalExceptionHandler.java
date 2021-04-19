@@ -2,6 +2,7 @@ package com.example.pplflwapi.handler;
 
 import com.example.pplflwapi.controller.model.ErrorResponse;
 import com.example.pplflwapi.exception.EventProcessingException;
+import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,7 @@ public class GlobalExceptionHandler {
 
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(e.getMessage());
+        errorResponse.setTimestamp(LocalDateTime.now());
         return errorResponse;
     }
 }
