@@ -1,5 +1,6 @@
 package com.example.pplflwapi.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.example.pplflwapi.controller.model.EmployeeState;
 import com.example.pplflwapi.controller.model.request.EmployeeSaveRequest;
 import com.example.pplflwapi.controller.model.response.EmployeeResponse;
@@ -7,8 +8,6 @@ import com.example.pplflwapi.statemachine.event.EmployeeEvent;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class EmployeeControllerTest {
@@ -25,8 +24,7 @@ class EmployeeControllerTest {
         employeeSaveRequest.setAge(EMPLOYEE_AGE);
         employeeSaveRequest.setName(EMPLOYEE_NAME);
 
-        EmployeeResponse savedEmployeeResponse = employeeController.create(employeeSaveRequest);
-        EmployeeResponse employeeResponse = employeeController.find(savedEmployeeResponse.getId());
+        EmployeeResponse employeeResponse = employeeController.create(employeeSaveRequest);
 
         assertEquals(EMPLOYEE_AGE, employeeResponse.getAge());
         assertEquals(EMPLOYEE_NAME, employeeResponse.getName());
@@ -39,9 +37,7 @@ class EmployeeControllerTest {
         employeeSaveRequest.setAge(EMPLOYEE_AGE);
         employeeSaveRequest.setName(EMPLOYEE_NAME);
 
-        EmployeeResponse savedEmployeeResponse = employeeController.create(employeeSaveRequest);
-        EmployeeResponse employeeResponse = employeeController.find(savedEmployeeResponse.getId());
-
+        EmployeeResponse employeeResponse = employeeController.create(employeeSaveRequest);
         employeeResponse = employeeController.processEvent(employeeResponse.getId(), EmployeeEvent.CHECK);
 
         assertEquals(EMPLOYEE_AGE, employeeResponse.getAge());
@@ -55,8 +51,7 @@ class EmployeeControllerTest {
         employeeSaveRequest.setAge(EMPLOYEE_AGE);
         employeeSaveRequest.setName(EMPLOYEE_NAME);
 
-        EmployeeResponse savedEmployeeResponse = employeeController.create(employeeSaveRequest);
-        EmployeeResponse employeeResponse = employeeController.find(savedEmployeeResponse.getId());
+        EmployeeResponse employeeResponse = employeeController.create(employeeSaveRequest);
 
         employeeController.processEvent(employeeResponse.getId(), EmployeeEvent.CHECK);
         employeeResponse = employeeController.processEvent(employeeResponse.getId(), EmployeeEvent.APPROVE);
@@ -72,8 +67,7 @@ class EmployeeControllerTest {
         employeeSaveRequest.setAge(EMPLOYEE_AGE);
         employeeSaveRequest.setName(EMPLOYEE_NAME);
 
-        EmployeeResponse savedEmployeeResponse = employeeController.create(employeeSaveRequest);
-        EmployeeResponse employeeResponse = employeeController.find(savedEmployeeResponse.getId());
+        EmployeeResponse employeeResponse = employeeController.create(employeeSaveRequest);
 
         employeeController.processEvent(employeeResponse.getId(), EmployeeEvent.CHECK);
         employeeController.processEvent(employeeResponse.getId(), EmployeeEvent.APPROVE);

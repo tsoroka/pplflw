@@ -1,4 +1,7 @@
-Swagger can be reached via "http://localhost:8080/pplflw/swagger-ui/"
+How to start application on localhost:
+1. Run *mvn clean install*
+1. Run *docker-compose up --build*
+1. Open Swagger via "http://localhost:8080/pplflw/swagger-ui/"
 
 **Answers to Second Part:**
 
