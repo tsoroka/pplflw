@@ -45,7 +45,7 @@ public class EmployeeController {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public EmployeeResponse create(EmployeeSaveRequest employeeSaveRequest) {
+    public EmployeeResponse create(@RequestBody @NotNull @Valid EmployeeSaveRequest employeeSaveRequest) {
         Employee employee = employeeMapper.toEmployee(employeeSaveRequest);
         return employeeMapper.toEmployeeResponse(employeeService.create(employee));
     }
@@ -53,7 +53,7 @@ public class EmployeeController {
     @PutMapping(path = "/{employeeId}")
     @ResponseStatus(value = HttpStatus.OK)
     public EmployeeResponse update(@PathVariable Long employeeId,
-                           @RequestBody @Valid @NotNull EmployeeSaveRequest employeeSaveRequest) {
+                           @RequestBody @NotNull @Valid EmployeeSaveRequest employeeSaveRequest) {
         Employee employee = employeeMapper.toEmployee(employeeSaveRequest);
         employee.setId(employeeId);
         return employeeMapper.toEmployeeResponse(employeeService.update(employee));

@@ -1,0 +1,11 @@
+package com.example.pplflwapi.controller.model;
+
+import io.swagger.annotations.ApiModel;
+import lombok.Data;
+
+@Data
+@ApiModel("Error response")
+public class ErrorResponse {
+
+    private String message;
+}

@@ -14,9 +14,9 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.service.StateMachineService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,13 +30,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final StateMachineService<EmployeeState, EmployeeEvent> stateMachineService;
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Employee> findAll() {
         return employeeRepository.findAll();
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Employee find(Long employeeId) {
         Optional<Employee> employee = employeeRepository.findById(employeeId);
         return Optional.of(employee).get()
